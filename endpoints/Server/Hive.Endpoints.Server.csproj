@@ -11,7 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.32.0" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.0.1" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.0.36" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>
