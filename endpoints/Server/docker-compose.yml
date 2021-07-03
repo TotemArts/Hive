@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  hive-endpoints-server-api:
+    build:
+      context: .
+      dockerfile: src/API/Dockerfile
+    image: ${DOCKER_REGISTRY-}hive-endpoints-server-api
+  hive-endpoints-server-worker:
+    build:
+      context: .
+      dockerfile: src/worker/Dockerfile
+    image: ${DOCKER_REGISTRY-}hive-endpoints-server-worker
