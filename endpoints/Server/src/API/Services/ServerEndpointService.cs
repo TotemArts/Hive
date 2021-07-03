@@ -1,4 +1,8 @@
 using System;
+using System.IO.Pipelines;
+using System.Net;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Hive.Endpoints.Server.API.Commands;
 using Hive.Endpoints.Server.Contracts.Commands;
@@ -21,12 +25,26 @@ namespace Hive.Endpoints.Server.API.Services
 
         public override async Task OnConnectedAsync(ConnectionContext connection)
         {
-            // todo: go from a connection to multiple messages
-            var incomingMessage = "Hive";
+            var ipEndpoint = ((IPEndPoint) connection.RemoteEndPoint!);
+            Console.WriteLine($"I am connected to {ipEndpoint.Address} on port number {ipEndpoint.Port}");
+            var messageInput = connection.Transport.Input;
 
-            await _bus.Send<IHandleIncomingMessageCommand>(new HandleIncomingMessageCommand(incomingMessage));
+            var readMessages = GetMessagesAsync(messageInput, ipEndpoint, connection.ConnectionClosed);
+            var writeMessages = Task.CompletedTask;
 
-            throw new NotImplementedException();
+            await Task.WhenAll(readMessages, writeMessages);
+            Console.WriteLine($"Connected was closed: {ipEndpoint.Address} on port number {ipEndpoint.Port}");
+        }
+
+        public async Task GetMessagesAsync(PipeReader messageInput, IPEndPoint ipEndpoint, CancellationToken connectionClosed)
+        {
+            ReadResult messageResult;
+            while (!(messageResult = await messageInput.ReadAsync(connectionClosed)).IsCanceled)
+            {
+                var incomingMessage = Encoding.UTF8.GetString(messageResult.Buffer);
+                messageInput.AdvanceTo(messageResult.Buffer.End);
+                await _bus.Send<IHandleIncomingMessageCommand>(new HandleIncomingMessageCommand(incomingMessage, ipEndpoint));
+            }
         }
     }
 }

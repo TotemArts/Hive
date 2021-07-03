@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.API",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Shared.Common", "..\..\shared\src\Common\Hive.Shared.Common.csproj", "{5E316C81-15FF-4C3E-9956-F0ACB6BE221F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.Endpoints.Server.Worker", "src\Worker\Hive.Endpoints.Server.Worker.csproj", "{BA396588-C84A-4E1E-B38D-FCFF0F27AF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Worker", "src\Worker\Hive.Endpoints.Server.Worker.csproj", "{BA396588-C84A-4E1E-B38D-FCFF0F27AF3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.Endpoints.Server.Contracts", "src\Contracts\Hive.Endpoints.Server.Contracts.csproj", "{0B5D2367-D61C-4AE6-9835-571C87C06C4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Contracts", "src\Contracts\Hive.Endpoints.Server.Contracts.csproj", "{0B5D2367-D61C-4AE6-9835-571C87C06C4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.Endpoints.Server.Domain", "src\Domain\Hive.Endpoints.Server.Domain.csproj", "{BAA072D5-56E6-40DC-A2BD-41CFE20EE8DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Domain", "src\Domain\Hive.Endpoints.Server.Domain.csproj", "{BAA072D5-56E6-40DC-A2BD-41CFE20EE8DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.Endpoints.Server.Infrastructure", "src\Infrastructure\Hive.Endpoints.Server.Infrastructure.csproj", "{70BFF80D-D3E4-4D72-B144-AF607F53C562}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Infrastructure", "src\Infrastructure\Hive.Endpoints.Server.Infrastructure.csproj", "{70BFF80D-D3E4-4D72-B144-AF607F53C562}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
