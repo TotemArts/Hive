@@ -1,7 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Hive.Endpoints.Server.Contracts.Commands;
+using Hive.Endpoints.Server.Worker.Commands;
 using Hive.Shared.Common.Extensions;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 
 namespace Hive.Endpoints.Server.Worker.CommandManagers
@@ -9,18 +10,21 @@ namespace Hive.Endpoints.Server.Worker.CommandManagers
     public class GameServerCommandManager : IGameServerCommandManager
     {
         private readonly ILogger<GameServerCommandManager> _logger;
+        private readonly IBus _bus;
 
-        public GameServerCommandManager(ILogger<GameServerCommandManager> logger)
+        public GameServerCommandManager(ILogger<GameServerCommandManager> logger, IBus bus)
         {
             _logger = logger;
+            _bus = bus;
         }
 
-        public Task HandleIncomingMessageAsync(IHandleIncomingMessageCommand command)
+        public async Task HandleIncomingMessageAsync(IHandleIncomingMessageCommand command)
         {
             // todo: Actually process the message to the multiple different possibilities
 
             /*
-// Packet Commands
+Packet Commands
+c = me, s = renx_server
 `define AUTH		"a"		// c->s Auth Request, s->c Auth Confirmed
 `define COMMAND		"c"		// c->s ConsoleCommand, s->c ConsoleCommand Completed/End of Response
 
@@ -35,7 +39,7 @@ namespace Hive.Endpoints.Server.Worker.CommandManagers
              */
             if (command.Message.Length == 0)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var debugMessage = Utf8Decoder.ToLiteral(Utf8Decoder.GetBytes(command.Message)[1..]);
@@ -58,15 +62,19 @@ namespace Hive.Endpoints.Server.Worker.CommandManagers
                     break;
                 case 'v':
                     _logger.LogInformation("Version request: {message}", debugMessage);
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "s\n"));
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cserverinfo\n"));
+
                     break;
                 case 'l':
                     _logger.LogInformation("RxLog request: {message}", debugMessage);
+
                     break;
                 case 'e':
                     _logger.LogInformation("Error request: {message}", debugMessage);
                     break;
             };
-            return Task.CompletedTask;
+            return;
         }
     }
 }

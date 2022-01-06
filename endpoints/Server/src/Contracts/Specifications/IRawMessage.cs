@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Hive.Endpoints.Server.Contracts.Specifications
+﻿namespace Hive.Endpoints.Server.Contracts.Specifications
 {
     public interface IRawMessage
     {

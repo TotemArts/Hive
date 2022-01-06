@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class MassTransitExtensions
     {
-        public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration, Action<IBusConfigurator>? configurator = null)
+        public static IServiceCollection AddMassTransit(this IServiceCollection services, IConfiguration configuration, Action<IBusConfigurator>? configurator = null, bool uniqueReceiver = false)
         {
             var rabbitMqOptions = ConfigurationToOptions(configuration);
 
@@ -38,8 +38,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
                 if (config.HasConsumers)
-                    cfg.ReceiveEndpoint(DomainInformation.ServiceName, ep =>
+                    
+                    cfg.ReceiveEndpoint($"{DomainInformation.ServiceName}{(uniqueReceiver? $":{Guid.NewGuid()}":"")}", ep =>
                     {
+                        if (uniqueReceiver)
+                        {
+                            ep.Durable = false;
+                            ep.AutoDelete = true;
+                        }
+
                         ep.UseMessageRetry(policy => policy.Interval(10, TimeSpan.FromMilliseconds(333)).Handle<ObjectDisposedException>());
                         config.HandleExceptions(ep);
 

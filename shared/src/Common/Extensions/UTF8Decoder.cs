@@ -36,6 +36,33 @@ namespace Hive.Shared.Common.Extensions
             return input;
         }
 
+        public static string ToLiteral(string input)
+        {
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                char c = input[i];
+                if (c >= ' ' && c != '\\' && c != '"' && (c <= '~' || c >= '¡') && c <= 'ÿ')
+                    continue;
+                string insert = c switch
+                {
+                    '\a' => "\\a",
+                    '\b' => "\\b",
+                    '\f' => "\\f",
+                    '\n' => "\\n",
+                    '\r' => "\\r",
+                    '\t' => "\\t",
+                    '\v' => "\\v",
+                    '\\' => "\\\\",
+                    '"' => "\\\"",
+                    _ => $"\\x{(int)c:X4}"
+                };
+                input = input.Remove(i, 1).Insert(i, insert);
+            }
+
+            input = input.Insert(0, "\"") + "\"";
+            return input;
+        }
+
         public static byte[] GetBytes(string message)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(message);
