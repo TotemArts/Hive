@@ -30,8 +30,13 @@ namespace Hive.Endpoints.Server.API.Services
         public override async Task OnConnectedAsync(ConnectionContext connection)
         {
             var ipEndpoint = ((IPEndPoint) connection.RemoteEndPoint!);
-            _logger.LogInformation($"I am connected to {ipEndpoint.Address} on port number {ipEndpoint.Port}");
-            await _manager.RegisterServerAsync(ipEndpoint.Address.ToString(), ipEndpoint.Port);
+            var address = ipEndpoint.Address.ToString();
+            var port = ipEndpoint.Port;
+            if (ipEndpoint.Address.IsIPv4MappedToIPv6)
+                address = address.Substring(7);
+
+            _logger.LogInformation($"I am connected to {address} on port number {port}");
+            await _manager.RegisterServerAsync(address, port);
 
             var messageInput = connection.Transport.Input;
             var messageOutput = connection.Transport.Output;
@@ -44,8 +49,8 @@ namespace Hive.Endpoints.Server.API.Services
 
             await Task.WhenAny(readMessages, writeMessages);
 
-            await _manager.UnRegisterServerAsync(ipEndpoint.Address.ToString(), ipEndpoint.Port);
-            _logger.LogInformation($"Connected was closed: {ipEndpoint.Address} on port number {ipEndpoint.Port}");
+            await _manager.UnRegisterServerAsync(address, port);
+            _logger.LogInformation($"Connected was closed: {address} on port number {port}");
         }
 
         private async Task GetMessagesAsync(PipeReader messageInput, IPEndPoint ipEndpoint, CancellationToken connectionClosed)
@@ -54,8 +59,8 @@ namespace Hive.Endpoints.Server.API.Services
             while (!(messageResult = await messageInput.ReadAsync(connectionClosed)).IsCanceled)
             {
                 var incomingMessages = Encoding.UTF8.GetString(messageResult.Buffer);
+                _logger.LogInformation("Got Message: {IncomingMessage}", Utf8Decoder.ToLiteral(incomingMessages));
                 foreach(var incomingMessage in incomingMessages.Split('\n')) {
-                    _logger.LogInformation("Got Message: {IncomingMessage}", Utf8Decoder.ToLiteral(incomingMessage));
                     try
                     {
                         await _bus.Send<IHandleIncomingMessageCommand>(new HandleIncomingMessageCommand(incomingMessage, ipEndpoint));
@@ -71,9 +76,14 @@ namespace Hive.Endpoints.Server.API.Services
 
         private async Task SendMessagesAsync(PipeWriter messageOutput, IPEndPoint ipEndpoint, CancellationToken connectionClosed)
         {
+            var address = ipEndpoint.Address.ToString();
+            var port = ipEndpoint.Port;
+            if (ipEndpoint.Address.IsIPv4MappedToIPv6)
+                address = address.Substring(7);
+
             while (!connectionClosed.IsCancellationRequested)
             {
-                var message = await _manager.RetrieveSendQueueAsync(ipEndpoint.Address.ToString(), ipEndpoint.Port);
+                var message = await _manager.RetrieveSendQueueAsync(address, port);
                 if (!string.IsNullOrWhiteSpace(message))
                 {
                     _logger.LogInformation("Sending Message: {OutgoingMessage}", Utf8Decoder.ToLiteral(message));

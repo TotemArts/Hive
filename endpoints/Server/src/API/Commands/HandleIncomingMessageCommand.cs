@@ -13,6 +13,8 @@ namespace Hive.Endpoints.Server.API.Commands
         public HandleIncomingMessageCommand(string message, IPEndPoint ipEndpoint) : this(message)
         {
             Address = ipEndpoint.Address.ToString();
+            if (ipEndpoint.Address.IsIPv4MappedToIPv6)
+                Address = Address.Substring(7);
             Port = ipEndpoint.Port;
         }
 

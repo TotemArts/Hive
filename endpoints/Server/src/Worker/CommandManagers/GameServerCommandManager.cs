@@ -64,6 +64,17 @@ c = me, s = renx_server
                     _logger.LogInformation("Version request: {message}", debugMessage);
                     await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "s\n"));
                     await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cserverinfo\n"));
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cgameinfo\n"));
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cgameinfo bIsCompetitive\n"));
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cmutatorlist\n"));
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "crotation\n"));
+/*
+
+RenX::Server::fetchClientList();
+RenX::Server::updateBuildingList();
+
+ */
+                    await _bus.Publish(new SendToServerCommand(command.Address, command.Port, "cping srv_init_done\n"));
 
                     break;
                 case 'l':
