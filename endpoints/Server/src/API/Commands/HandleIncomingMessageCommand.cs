@@ -12,10 +12,12 @@ namespace Hive.Endpoints.Server.API.Commands
 
         public HandleIncomingMessageCommand(string message, IPEndPoint ipEndpoint) : this(message)
         {
-            IpEndpoint = ipEndpoint;
+            Address = ipEndpoint.Address.ToString();
+            Port = ipEndpoint.Port;
         }
 
         public string Message { get; }
-        public IPEndPoint IpEndpoint { get; }
+        public string Address { get; }
+        public int Port { get; }
     }
 }

@@ -1,5 +1,62 @@
 version: "3.7"
 
 services:
-  traefik:
-    
+  ambassador:
+    image: quay.io/datawire/ambassador:1.6.1
+    ports:
+      - "21337:21337" # RenX Servers
+      - "8190:8080" # grpc endpoints
+      - "8879:8877" # Administration
+    volumes:
+      - ./ambassador/ambassador-config:/ambassador/ambassador-config
+    environment:
+      - AMBASSADOR_NO_KUBEWATCH=no_kubewatch
+      - AMBASSADOR_VERIFY_SSL_FALSE=true
+    networks:
+      - hive
+
+  rabbitmq:
+    image: masstransit/rabbitmq:3.8.5
+    ports:
+      - "15671:15672"
+      - "5671:5672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - hive
+
+  mongodb:
+    image: bitnami/mongodb:4.4.8-debian-10-r31
+    ports:
+      - "27016:21017" # RenX Servers
+    volumes:
+      - mongo-data:/bitnami/mongodb
+    environment:
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_NAME=rs0
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb
+      - MONGODB_ROOT_PASSWORD=mySecretPassword
+      - MONGODB_REPLICA_SET_KEY=elzYUWNDjB
+    networks:
+      - hive
+
+  seq:
+    image: datalust/seq:2021.1.5425
+    ports:
+      - 8974:80
+    volumes:
+      - seq-data:/data
+    environment:
+      ACCEPT_EULA: "Y"
+    networks:
+      - hive
+
+volumes:
+  mongo-data:
+  rabbitmq-data:
+  seq-data:
+
+networks:
+  hive:
+    name: hive

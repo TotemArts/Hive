@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.API", "src\API\Hive.Endpoints.Server.API.csproj", "{B179D998-4273-41B2-986C-A09F00A9A29E}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Domain", "src\Domain\Hive.Endpoints.Server.Domain.csproj", "{BAA072D5-56E6-40DC-A2BD-41CFE20EE8DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hive.Endpoints.Server.Infrastructure", "src\Infrastructure\Hive.Endpoints.Server.Infrastructure.csproj", "{70BFF80D-D3E4-4D72-B144-AF607F53C562}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9119D9B1-6591-4C06-B461-D7EAB77F40F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{70BFF80D-D3E4-4D72-B144-AF607F53C562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70BFF80D-D3E4-4D72-B144-AF607F53C562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70BFF80D-D3E4-4D72-B144-AF607F53C562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9119D9B1-6591-4C06-B461-D7EAB77F40F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9119D9B1-6591-4C06-B461-D7EAB77F40F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9119D9B1-6591-4C06-B461-D7EAB77F40F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9119D9B1-6591-4C06-B461-D7EAB77F40F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

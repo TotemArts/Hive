@@ -20,7 +20,7 @@ namespace Hive.Endpoints.Server.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel(options => {
-                        options.ListenLocalhost(21337, builder => {
+                        options.ListenAnyIP(21337, builder => {
                             builder.UseConnectionHandler<ServerEndpointService>();
                          });
                     });

@@ -1,0 +1,6 @@
+---
+apiVersion: ambassador/v1
+kind: TCPMapping
+name: endpoints_server_mapping
+port: 21337
+service: hive-endpoints-server-api:21337
